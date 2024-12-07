@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Battle Bot Control</title>
+</head>
+<body>
+  <h2>Control the Battle Bot</h2>
+  <script>
+    // Define the WebSocket variable globally to access it in multiple functions
+    let ws;
+
+    // Function to connect to the WebSocket
+    function connectWebSocket() {
+      // Replace <ESP32_IP> with the actual IP address of the ESP32 AP, like 192.168.4.1
+      // ws = new WebSocket('ws://192.168.4.1/ws');
+      // ws = new WebSocket('ws://192.168.88.165/ws');
+      ws = new WebSocket('ws://192.168.88.12/ws');
+
+      ws.onopen = () => {
+        console.log('Connected to WebSocket');
+      };
+
+
+      ws.onmessage = (event) => {
+        console.log("Received message from ESP32: " + event.data);
+      };
+
+
+
+
+      ws.onerror = (error) => {
+        console.error("WebSocket error:", error);
+      };
+
+
+
+
+      ws.onclose = (event) => {
+        console.log("WebSocket closed, attempting to reconnect...");
+        setTimeout(connectWebSocket, 1000); // Retry connection after 1 second
+      };
+    }
+
+    // Call the function to initially connect to the WebSocket
+    connectWebSocket();
+
+
+    // Check if WebSocket is open before sending
+    function sendCommand(command) {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(command);
+      } else {
+        console.log("WebSocket not connected yet. Command not sent:", command);
+      }
+    }
+
+
+    // Event listeners for keyboard controls
+    document.addEventListener('keydown', (event) => {
+      console.log('Key pressed:', event.key);
+      if (event.key === 'ArrowUp') {
+        sendCommand('U');
+      } else if (event.key === 'ArrowDown') {
+        sendCommand('D');
+      } else if (event.key === 'ArrowLeft') {
+        sendCommand('L');
+      } else if (event.key === 'ArrowRight') {
+        sendCommand('R');
+      } else if (event.code === 'KeyS') {
+        sendCommand('S');
+      } 
+      // } else if (event.key == 'b') {
+      //   sendCommand('BOOST');
+      // }
+    });
+
+
+    // document.addEventListener('keyup', () => {
+    //   sendCommand('STOP');
+    // });
+  </script>
+</body>
+</html>

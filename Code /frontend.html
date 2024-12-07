@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D.I.M BOT CONTROLLER</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(to bottom right, #e9d5ff, #fbcfe8, #fecaca);
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+        }
+        h1 {
+            font-size: 2.25rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            animation: color-change 5s infinite;
+        }
+        .names {
+            color: white;
+            font-size: 1.125rem;
+        }
+        .image-container {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            width: 14rem;
+        }
+        .button {
+            width: 100%;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            font-size: 1.5rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .arrow {
+            background-color: #6366f1;
+            color: white;
+        }
+        .arrow:hover {
+            background-color: #4f46e5;
+        }
+        .arrow.active {
+            background-color: #fbbf24;
+            color: #1f2937;
+        }
+        .stop {
+            grid-column: 2;
+            grid-row: 2;
+            padding: 0.5rem;
+            background-color: #ef4444;
+        }
+        .stop:hover {
+            background-color: #dc2626;
+        }
+        .stop svg {
+            width: 100%;
+            height: 100%;
+        }
+        .stop {
+        grid-column: 2;
+        grid-row: 2;
+        padding: 0.5rem;
+        background-color: #ef4444;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow */
+        transition: box-shadow 0.2s, background-color 0.2s; /* Add transition for smooth effect */
+      }
+
+      .stop:hover {
+        background-color: #dc2626;
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
+      }
+        @keyframes color-change {
+            0% { color: #f472b6; }
+            25% { color: #60a5fa; }
+            50% { color: #34d399; }
+            75% { color: #fbbf24; }
+            100% { color: #f472b6; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>D.I.M BOT CONTROLLER</h1>
+        <p class="names">Ishanvi Lakhani, Megha Esturi, Deepika Agrawal</p>
+    </div>
+    
+    <div class="image-container">
+        <img src="/Users/ishanvilakhani/Desktop/Battlebot/Code /Robot Car.jpeg" alt="Robot Car" width="300" height="200">
+    </div>
+
+    <div class="controls">
+        <button class="button arrow" id="up">▲</button>
+        <button class="button arrow" id="left">◄</button>
+        <button class="button stop" id="stop">
+            <svg viewBox="0 0 100 100">
+                <path d="M30 0 H70 L100 30 V70 L70 100 H30 L0 70 V30 Z" fill="white"/>
+                <path d="M32 3 H68 L97 32 V68 L68 97 H32 L3 68 V32 Z" fill="#dc2626"/>
+                <text x="50" y="62" text-anchor="middle" fill="white" font-size="30" font-weight="bold" font-family="Arial, sans-serif">STOP</text>
+            </svg>
+        </button>
+        <button class="button arrow" id="right">►</button>
+        <button class="button arrow" id="down">▼</button>
+    </div>
+
+    <script>
+        const buttons = document.querySelectorAll('.button');
+        let activeKey = null;
+
+        function handleButtonPress(event) {
+            const button = event.target.closest('.button');
+            if (button) {
+                activeKey = button.id;
+                button.classList.add('active');
+            }
+        }
+
+        function handleButtonRelease() {
+            if (activeKey) {
+                document.getElementById(activeKey).classList.remove('active');
+                activeKey = null;
+            }
+        }
+
+        buttons.forEach(button => {
+            button.addEventListener('mousedown', handleButtonPress);
+            button.addEventListener('mouseup', handleButtonRelease);
+            button.addEventListener('mouseleave', handleButtonRelease);
+        });
+
+        document.addEventListener('keydown', (event) => {
+            const key = event.key.toLowerCase();
+            if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 's'].includes(key)) {
+                event.preventDefault();
+                const buttonId = key === 's' ? 'stop' : key.replace('arrow', '');
+                const button = document.getElementById(buttonId);
+                if (button) {
+                    activeKey = buttonId;
+                    button.classList.add('active');
+                }
+            }
+        });
+
+        document.addEventListener('keyup', () => {
+            if (activeKey) {
+                document.getElementById(activeKey).classList.remove('active');
+                activeKey = null;
+            }
+        });
+    </script>
+</body>
+</html>
